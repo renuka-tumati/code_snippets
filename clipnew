@@ -1,15 +1,19 @@
-What is Great Expectations?
-Great Expectations is an open-source tool for validating, documenting, and profiling your data. It helps define and enforce data quality rules (expectations) across your datasets.
+What is PyTest?
+PyTest is an open-source testing framework for Python, designed to make it easy to write simple and scalable test cases for your code.
 
 Key Features
-Data Validation: Ensures data meets quality standards.
-Automated Documentation: Generates comprehensive data docs.
-Data Profiling: Provides insights into data structure and quality.
-Integration: Works with various data sources like databases and data lakes.
+Simple Syntax: Easy-to-write and read test cases.
+Fixtures: Reusable setup and teardown code.
+Plugins: Extendable with a rich ecosystem of plugins.
+Parameterization: Run tests with multiple sets of parameters.
 Advantages
 Open Source
-Proactive Quality Checks
-Improved Data Trust
-Ease of Use
-Customizable
+User-Friendly
+Highly Extendable
+Supports Various Test Types (unit, functional, integration)
 Strong Community Support
+Use Cases
+Unit Testing
+Integration Testing
+Functional Testing
+End-to-End Testing
