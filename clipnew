@@ -1,0 +1,34 @@
+https://docs.databricks.com/en/delta-live-tables/expectations.html
+https://docs.greatexpectations.io/docs/1.0-prerelease/cloud/why_gx_cloud/
+https://greatexpectations.io/expectations/
+https://github.com/greatexpectationslabs/put-data-pipeline-under-test-with-pytest-and-great-expectations
+
+### Slide: Understanding Data Observability
+
+---
+
+#### **What is Data Observability?**
+**Data observability** is the comprehensive monitoring, tracking, and management of data pipelines to ensure data reliability, quality, and performance. It provides end-to-end visibility into data workflows, enabling proactive issue detection and resolution.
+
+---
+
+#### **Importance and Advantages**
+- **Data Reliability**: Real-time issue detection ensures accuracy and trustworthiness.
+- **Data Quality**: Monitors metrics like accuracy, completeness, and consistency.
+- **Pipeline Performance**: Identifies and resolves bottlenecks for efficiency.
+- **Compliance and Governance**: Maintains data integrity and regulatory compliance.
+- **Cost Reduction**: Proactively detects issues, reducing downtime and associated costs.
+- **Better Decisions**: Provides high-quality data for informed decision-making.
+
+---
+
+#### **Key Tools**
+- **Great Expectations**
+- **Monte Carlo**
+- **Databand**
+- **DataDog**
+- **Collibra**
+
+---
+
+By implementing data observability, organizations ensure data is reliable, high-quality, and ready for analysis.
