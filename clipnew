@@ -1,3 +1,37 @@
+These scenarios should simulate real-world usage scenarios to ensure thorough testing.
+
+access controls to provide users with an environment that accurately reflects the final system.
+ This ensures that users are equipped with the knowledge and tools they need to conduct UAT successfully.
+Regression testing
+Validation and sign off
+
+Coordination between QE teams and users is essential throughout the UAT process. QE teams should:
+
+Maintain Open Communication: Regularly communicate with users to address questions, concerns, and issues that arise during testing.
+
+Provide Support: Offer assistance and guidance to users throughout the testing process, ensuring they have the resources they need to conduct UAT effectively.
+
+Facilitate Feedback Sessions: Schedule feedback sessions with users to gather input on the testing process, test coverage, and system usability. This feedback helps improve future iterations of the system.
+
+Define the scope of UAT
+or success criteria for UAT
+User Involvement:
+Involve users early in UAT planning.
+Regularly communicate progress and gather feedback.
+User Training:
+Train users on UAT scenarios, tools, and processes.
+User Feedback Loop:
+Users provide feedback during testing.
+QE incorporates feedback into test scenarios.
+Collaboration:
+QE collaborates with users to understand their needs.
+Users and QE jointly prioritize defects.
+Documentation and Training Materials:
+QE prepares UAT documentation and training materials for users.
+
+
+
+
 Development Environment:
 - Python Distribution: Ensure compatibility with Databricks runtime Python version.
 - IDE: Use Databricks notebooks or Databricks Connect for local development.
