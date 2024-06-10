@@ -1,0 +1,111 @@
+Completeness:
+
+Row count: Ensure the total number of rows in the dataset matches the expected count.
+
+Example: Validate that the customer dataset contains 1000 records.
+
+Column count: Verify that all expected columns are present in the dataset.
+
+Example: Check that the sales dataset includes columns for date, product, quantity, and price.
+
+Presence of required fields: Confirm that mandatory fields are populated for all records.
+
+Example: Ensure that the "name" and "email" fields are not null in the customer dataset.
+
+Missing values count: Count the number of missing values in each column.
+
+Example: Identify and quantify missing values in the "age" column of the customer dataset.
+
+Consistency:
+
+Unique value constraint: Check for duplicate records or values in key columns.
+
+Example: Ensure that each customer ID is unique in the customer dataset.
+
+Referential integrity checks: Verify that foreign key values match primary key values in related tables.
+
+Example: Validate that each order record in the sales dataset corresponds to a valid customer ID.
+
+Data type consistency checks: Ensure that data types are consistent across all records in a column.
+
+Example: Confirm that all values in the "price" column of the sales dataset are numeric.
+
+Format consistency checks: Validate that data follows a consistent format (e.g., dates in YYYY-MM-DD format).
+
+Example: Check that all dates in the "dob" column of the customer dataset are formatted correctly.
+
+Accuracy:
+
+Cross-validation with external sources: Compare data with external sources to verify accuracy.
+
+Example: Validate customer addresses by cross-referencing them with a trusted address validation service.
+
+Statistical analysis of data distribution: Analyze data distribution to detect outliers or anomalies.
+
+Example: Use descriptive statistics to identify any unusually high sales amounts in the sales dataset.
+
+Accuracy of calculated fields: Verify the accuracy of computed fields or derived metrics.
+
+Example: Validate the total revenue calculated from the sales dataset matches the sum of individual sales amounts.
+
+Accuracy of historical data against current data: Compare historical data with the latest data to ensure consistency.
+
+Example: Validate that customer demographics haven't changed significantly over time.
+
+Validity:
+
+Range checks: Ensure that data values fall within expected ranges.
+
+Example: Validate that ages in the customer dataset are between 18 and 100 years.
+
+Domain checks: Verify that data values belong to predefined domains or categories.
+
+Example: Check that product categories in the inventory dataset match predefined categories.
+
+Format checks: Confirm that data follows specified formats or patterns.
+
+Example: Validate that phone numbers in the customer dataset are formatted as XXX-XXX-XXXX.
+
+Legal and regulatory compliance checks: Ensure data complies with relevant laws and regulations.
+
+Example: Validate that personally identifiable information (PII) is encrypted as required by data privacy regulations.
+
+Timeliness:
+
+Data freshness checks: Determine the age of the latest data compared to the current date.
+
+Example: Ensure that sales data is updated daily and not more than 24 hours old.
+
+Lag between data capture and processing: Measure the time elapsed between data capture and its availability for analysis.
+
+Example: Validate that sensor data is processed and available for analysis within 5 minutes of capture.
+
+Data delivery timeliness: Confirm that data is delivered to stakeholders within expected timeframes.
+
+Example: Ensure that weekly sales reports are delivered to managers every Monday morning.
+
+Time-sensitive data update monitoring: Monitor updates to time-sensitive data fields to ensure timely updates.
+
+Example: Track changes to inventory levels in real-time to prevent stockouts.
+
+Integrity:
+
+Integrity constraints validation: Verify that integrity constraints (e.g., primary key, unique key) are not violated.
+
+Example: Ensure that each employee record in the HR database has a unique employee ID.
+
+Foreign key constraints validation: Confirm that foreign key values refer to valid primary key values in related tables.
+
+Example: Validate that each product ID in the sales dataset corresponds to a valid product in the inventory dataset.
+
+Business rules validation: Check that data adheres to predefined business rules or logic.
+
+Example: Validate that discounts applied to sales transactions follow the company's discount policy.
+
+Data reconciliation across systems: Compare data between different systems or datasets to identify discrepancies.
+
+Example: Reconcile sales data between the CRM system and the accounting system to ensure consistency.
+
+These sample tests cover a range of data quality dimensions and can be customized to fit specific use cases and requirements in Medallion architecture or data projects.
+
+Add label
