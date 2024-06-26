@@ -1,5 +1,7 @@
 https://github.com/steveloughran/winutils/blob/master/hadoop-2.7.1/bin/winutils.exe
 
+https://www.knowledgehut.com/blog/big-data/how-to-install-apache-spark-on-windows
+
 
 
 To verify your Spark installation with Hadoop on Windows, and to start the Spark shell, follow these steps:
