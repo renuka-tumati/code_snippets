@@ -36,3 +36,45 @@ if __name__ == "__main__":
     credentials_file_path = "path/to/credentials.ini"
     aws_access_key_id, aws_secret_access_key = read_credentials(credentials_file_path)
     connect_to_s3(aws_access_key_id, aws_secret_access_key)
+
+
+List IAM User Permissions:
+
+bash
+Copy code
+aws iam list-user-permissions --user-name YourUserName
+Replace YourUserName with the name of the IAM user you want to list permissions for.
+
+List IAM Group Permissions:
+
+bash
+Copy code
+aws iam list-group-policies --group-name YourGroupName
+aws iam list-group-members --group-name YourGroupName
+Replace YourGroupName with the name of the IAM group.
+
+List IAM Role Permissions:
+
+bash
+Copy code
+aws iam list-attached-role-policies --role-name YourRoleName
+aws iam list-role-policies --role-name YourRoleName
+Replace YourRoleName with the name of the IAM role.
+
+List IAM Policy Permissions:
+
+bash
+Copy code
+aws iam list-policy-versions --policy-arn YourPolicyARN
+aws iam get-policy --policy-arn YourPolicyARN
+Replace YourPolicyARN with the ARN (Amazon Resource Name) of the IAM policy.
+
+Using boto3 in Python
+To achieve the same using Python, you'll use the boto3 library to interact with AWS IAM:
+
+
+
+
+
+
+
