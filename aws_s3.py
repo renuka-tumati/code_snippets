@@ -2,14 +2,20 @@
 aws_access_key_id        = 78
 aws_secret_access_key    = abc
 
+import configparser
 import boto3
 
 # Function to read credentials from a file
 def read_credentials(credentials_file_path):
-    with open(credentials_file_path, 'r') as file:
-        # Assuming the file contains key and id separated by ':'
-        key, id = file.read().strip().split(':')
-        return key, id
+    config = configparser.ConfigParser()
+    config.read(credentials_file_path)
+    
+    # Assuming section [hello-dev]
+    section = 'hello-dev'
+    access_key_id = config.get(section, 'aws_access_key_id')
+    secret_access_key = config.get(section, 'aws_secret_access_key')
+    
+    return access_key_id, secret_access_key
 
 # Function to connect to S3 using key and id
 def connect_to_s3(access_key_id, secret_access_key):
@@ -27,6 +33,6 @@ def connect_to_s3(access_key_id, secret_access_key):
 
 # Example usage
 if __name__ == "__main__":
-    credentials_file_path = "path/to/credentials.txt"
+    credentials_file_path = "path/to/credentials.ini"
     aws_access_key_id, aws_secret_access_key = read_credentials(credentials_file_path)
     connect_to_s3(aws_access_key_id, aws_secret_access_key)
