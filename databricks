@@ -1,0 +1,23 @@
+import requests
+import json
+from databricks_cli.sdk.api_client import ApiClient
+
+# Define your Databricks host and token
+databricks_host = "https://<your-databricks-instance>.azuredatabricks.net"
+databricks_token = "<your-databricks-token>"
+
+# Create an API client
+api_client = ApiClient(host=databricks_host, token=databricks_token)
+
+# Define your query
+query = """
+SELECT *
+FROM my_table
+LIMIT 10
+"""
+
+# Run the query
+response = api_client.perform_query("my_workspace", query)
+
+# Print the results
+print(json.dumps(response, indent=2))
