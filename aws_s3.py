@@ -1,3 +1,7 @@
+[hello-dev]
+aws_access_key_id        = 78
+aws_secret_access_key    = abc
+
 import boto3
 
 # Function to read credentials from a file
