@@ -1,4 +1,25 @@
-[hello-dev]
+import boto3
+
+# Replace with your AWS credentials
+aws_access_key_id = "YOUR_ACCESS_KEY_ID"
+aws_secret_access_key = "YOUR_SECRET_ACCESS_KEY"
+
+# Replace with your S3 bucket name and path
+bucket_name = "rdec-dev-datalake-ing-us-west-2"
+bucket_path = "source/camelcase"
+
+# Initialize S3 client
+s3 = boto3.client("s3", aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+
+# List objects in the specified bucket and path
+response = s3.list_objects_v2(Bucket=bucket_name, Prefix=bucket_path)
+
+# Print the list of files
+print("Files in S3 bucket:")
+for obj in response.get("Contents", []):
+    print(obj["Key"])
+    
+    [hello-dev]
 aws_access_key_id        = 78
 aws_secret_access_key    = abc
 
