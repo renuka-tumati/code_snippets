@@ -1,0 +1,44 @@
+from pyspark.sql import SparkSession
+
+# Initialize Spark session
+spark = SparkSession.builder.appName("ColumnLineage").getOrCreate()
+
+# Function to check column existence in a table
+def check_column_existence(table_name, column_name):
+    df = spark.table(table_name)
+    return column_name in df.columns
+
+# Bronze layer table
+bronze_table = "database.bronze_table_A"
+
+# Silver layer tables
+silver_tables = ["database.silver_table_B", "database.silver_table_C"]
+
+# Gold layer tables
+gold_tables = ["database.gold_table_E", "database.gold_table_F", "database.gold_table_G", "database.gold_table_H"]
+
+# Get columns from the bronze table
+bronze_df = spark.table(bronze_table)
+bronze_columns = bronze_df.columns
+
+# Initialize a dictionary to hold the lineage information
+column_lineage = {col: {"silver": [], "gold": []} for col in bronze_columns}
+
+# Check column presence in silver tables
+for col in bronze_columns:
+    for silver_table in silver_tables:
+        if check_column_existence(silver_table, col):
+            column_lineage[col]["silver"].append(silver_table)
+
+# Check column presence in gold tables
+for col in bronze_columns:
+    for silver_table in column_lineage[col]["silver"]:
+        for gold_table in gold_tables:
+            if check_column_existence(gold_table, col):
+                column_lineage[col]["gold"].append(gold_table)
+
+# Print the lineage information
+for col, lineage in column_lineage.items():
+    silver_tables = [table.split(".")[-1] for table in lineage["silver"]]
+    gold_tables = [table.split(".")[-1] for table in lineage["gold"]]
+    print(f"Column '{col}' from table 'A' -> Silver {silver_tables} -> Gold {gold_tables}")
