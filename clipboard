@@ -1,3 +1,25 @@
+
+from pyspark.sql import SparkSession
+
+# Create a Spark session
+spark = SparkSession.builder.appName("DataWarehouseConnection").getOrCreate()
+
+# Replace the following with your actual server details
+server_name = "<your-server-name>"
+database_name = "<your-database-name>"
+url = f"jdbc:sqlserver://{server_name};databaseName={database_name};integratedSecurity=true;"
+
+# Establish the connection and read data into a DataFrame using integrated security
+df = spark.read \
+    .format("jdbc") \
+    .option("url", url) \
+    .option("dbtable", "schema.table") \
+    .load()
+
+# Show the DataFrame
+df.show()
+
+
 https://docs.databricks.com/en/connect/external-systems/jdbc.html
 
 Advances: These are typically short-term loans provided by a financial institution that must be repaid, along with any interest or fees, making them a credit obligation.
