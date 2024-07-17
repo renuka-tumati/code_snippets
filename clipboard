@@ -1,4 +1,43 @@
 
+import pyodbc
+import pandas as pd
+
+# Connection details
+server = 'your_server_name'
+database = 'your_database_name'
+username = 'your_username'
+password = 'your_password'
+
+# Create connection string
+conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+
+# Establish connection
+conn = pyodbc.connect(conn_str)
+
+# Create cursor
+cursor = conn.cursor()
+
+# Example query
+query = 'SELECT * FROM your_table_name'
+
+# Execute query
+cursor.execute(query)
+
+# Fetch all rows
+rows = cursor.fetchall()
+
+# Convert to DataFrame
+df = pd.DataFrame(rows, columns=[desc[0] for desc in cursor.description])
+
+# Print first few rows of the DataFrame
+print(df.head())
+
+# Close cursor and connection
+cursor.close()
+conn.close()
+
+
+
 from pyspark.sql import SparkSession
 
 # Create a Spark session
