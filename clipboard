@@ -1,3 +1,42 @@
+import pyodbc
+
+# Define connection parameters
+server = 'your_databricks_server'
+port = 'your_port_number'  # e.g., '443' for HTTPS
+access_token = 'your_access_token'
+
+# Construct connection string
+conn_str = (
+    f"Driver=Simba Spark ODBC Driver;"
+    f"Host={server};"
+    f"Port={port};"
+    f"AuthMech=11;"  # OAuth 2.0 authentication
+    f"Auth_Flow=0;"  # Token pass-through
+    f"Auth_AccessToken={access_token};"
+    f"ThriftTransport=2;"  # Binary transport
+)
+
+try:
+    # Connect to Databricks
+    conn = pyodbc.connect(conn_str)
+    print("Connected to Databricks!")
+
+    # Example: Execute a query
+    cursor = conn.cursor()
+    query = "SELECT * FROM your_table LIMIT 10"
+    cursor.execute(query)
+
+    # Fetch and print results
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
+    # Close connections
+    cursor.close()
+    conn.close()
+
+except Exception as e:
+    print(f"Error connecting to Databricks: {str(e)}")
 
 Certainly! Here's a Python code snippet that demonstrates how to connect to the given connection string and execute a sample query using the Simba Spark ODBC Driver:
 
