@@ -1,15 +1,54 @@
 
+Certainly! Here's a Python code snippet that demonstrates how to connect to the given connection string and execute a sample query using the Simba Spark ODBC Driver:
+
+```python
+import pyodbc
+
+# Define the connection string
+connection_string = (
+    "Driver=Simba Spark ODBC Driver;"
+    "Host=[Server];"
+    "Port=[PortNumber];"
+    "AuthMech=11;"
+    "Auth_Flow=0;"
+    "Auth_AccessToken=[AccessToken];"
+    "ThriftTransport=2;"
+)
+
+# Establish a connection
+try:
+    conn = pyodbc.connect(connection_string)
+    cursor = conn.cursor()
+
+    # Execute a sample query
+    cursor.execute("SELECT * FROM my_table LIMIT 10")
+    rows = cursor.fetchall()
+
+    # Print the results
+    for row in rows:
+        print(row)
+
+    # Close the connection
+    conn.close()
+
+except pyodbc.Error as e:
+    print(f"Error connecting to the database: {e}")
+```
+
+Please replace `[Server]`, `[PortNumber]`, and `[AccessToken]` with the actual values from your environment. If you have any further questions or need additional assistance, feel free to ask! 😊
+
+-------------------
 import pyodbc
 import pandas as pd
 
 # Connection details
 server = 'your_server_name'
 database = 'your_database_name'
-username = 'your_username'
-password = 'your_password'
+username = ''
+password = ''
 
 # Create connection string
-conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={};PWD={}'
 f'DRIVER={{ODBC Driver 17 for SQL Server}};
 
 # Establish connection
