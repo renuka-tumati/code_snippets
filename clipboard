@@ -1,3 +1,70 @@
+import pandas as pd
+import requests
+
+# Existing Databricks SQL endpoint URI (replace with actual endpoint URI)
+endpoint_uri = ' '
+
+# Personal access token for authentication
+token = ' '
+
+try:
+    # HTTP headers for the API request
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+
+    # Databricks SQL query to execute
+    query = """
+            SELECT *
+            FROM main.rtumati.users
+            LIMIT 100
+            """
+
+    # API request payload
+    payload = {
+        'statement': query
+    }
+
+    # Send POST request to execute SQL query
+    response = requests.post(endpoint_uri, headers=headers, json=payload)
+
+    # Check if request was successful
+    if response.status_code == 200:
+        data = response.json()['data']
+
+        # Convert data to pandas DataFrame
+        df = pd.DataFrame(data)
+        
+        # Print or further process the DataFrame
+        print(df.head())
+
+    else:
+        print(f"Failed to execute query: {response.status_code} - {response.text}")
+
+except Exception as e:
+    print(f"Error: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------
+
+
+
 import pyodbc
 
 # Define connection parameters
