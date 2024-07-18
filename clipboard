@@ -1,4 +1,28 @@
 import pandas as pd
+
+# Load the Excel file
+excel_file = 'input.xlsx'
+
+# Read the Excel file into a pandas DataFrame
+df = pd.read_excel(excel_file)
+
+# Initialize an empty list to store the transformed data
+transformed_data = []
+
+# Iterate over each row in the DataFrame
+for index, row in df.iterrows():
+    # For each row, convert columns to rows
+    for col_name, cell_value in row.items():
+        transformed_data.append({'Column': col_name, 'Value': cell_value})
+
+# Convert the transformed data into a new DataFrame
+transformed_df = pd.DataFrame(transformed_data)
+
+# Print the transformed DataFrame (optional)
+print(transformed_df)
+
+-------------------
+import pandas as pd
 import requests
 
 # Existing Databricks SQL endpoint URI (replace with actual endpoint URI)
