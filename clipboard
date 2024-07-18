@@ -13,13 +13,26 @@ transformed_data = []
 for index, row in df.iterrows():
     # For each row, convert columns to rows
     for col_name, cell_value in row.items():
-        transformed_data.append({'Column': col_name, 'Value': cell_value})
+        # Determine the column identifier (1 for Column A, 2 for Column B)
+        if col_name == 'Column A':
+            col_id = 1
+        elif col_name == 'Column B':
+            col_id = 2
+        else:
+            col_id = None  # Handle unexpected column names
+        
+        # Append data with column identifier to transformed_data
+        transformed_data.append({'Column': col_name, 'Value': cell_value, 'ColumnID': col_id})
 
 # Convert the transformed data into a new DataFrame
 transformed_df = pd.DataFrame(transformed_data)
 
-# Print the transformed DataFrame (optional)
-print(transformed_df)
+# Save the transformed DataFrame to Excel
+output_file = 'output.xlsx'
+transformed_df.to_excel(output_file, index=False)
+
+print(f"Transformed data saved to {output_file}")
+
 
 -------------------
 import pandas as pd
