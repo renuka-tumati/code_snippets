@@ -1,3 +1,14 @@
+from databricks.connect import DatabricksSession
+
+spark = DatabricksSession.builder.profile("profilename").getOrCreate()
+
+df = spark.read.table("table name")
+df.show(5)
+
+
+-------------------
+ databricks auth login --configure-cluster --host <>
+----------------
 import requests
 import json
 from databricks_cli.sdk.api_client import ApiClient
