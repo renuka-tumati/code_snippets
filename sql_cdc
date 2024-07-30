@@ -1,0 +1,81 @@
+--Overlapping dates in cDC
+WITH EmployeeHistoryWithNext AS (
+    SELECT
+        employee_id,
+        effective_start_date,
+        effective_end_date,
+        LEAD(effective_start_date) OVER (PARTITION BY employee_id ORDER BY effective_start_date) AS next_start_date,
+        LEAD(effective_end_date) OVER (PARTITION BY employee_id ORDER BY effective_start_date) AS next_end_date
+    FROM
+        employee_history
+)
+SELECT
+    employee_id,
+    effective_start_date,
+    effective_end_date,
+    next_start_date,
+    next_end_date
+FROM
+    EmployeeHistoryWithNext
+WHERE
+    next_start_date IS NOT NULL
+    AND next_start_date <= effective_end_date;
+
+
+
+
+
+-- Missing dates in CDC
+WITH EmployeeHistoryWithNext AS (
+    SELECT
+        employee_id,
+        effective_start_date,
+        effective_end_date,
+        LEAD(effective_start_date) OVER (PARTITION BY employee_id ORDER BY effective_start_date) AS next_start_date
+    FROM
+        employee_history
+),
+MissingDays AS (
+    SELECT
+        employee_id,
+        effective_end_date AS current_end_date,
+        next_start_date,
+        DATEADD(day, 1, effective_end_date) AS gap_start_date,
+        DATEADD(day, -1, next_start_date) AS gap_end_date
+    FROM
+        EmployeeHistoryWithNext
+    WHERE
+        next_start_date IS NOT NULL
+        AND DATEADD(day, 1, effective_end_date) <= DATEADD(day, -1, next_start_date)
+)
+SELECT
+    employee_id,
+    current_end_date,
+    next_start_date,
+    gap_start_date,
+    gap_end_date,
+    DATEDIFF(day, gap_start_date, gap_end_date) + 1 AS missing_days
+FROM
+    MissingDays
+ORDER BY
+    employee_id,
+    gap_start_date;
+
+
+WITH DateSeries AS (
+    SELECT CAST('2024-01-01' AS DATE) AS DateValue -- Start date of your history range
+    UNION ALL
+    SELECT DATEADD(DAY, 1, DateValue)
+    FROM DateSeries
+    WHERE DateValue < CAST('2024-12-31' AS DATE) -- End date of your history range
+),
+MissingDates AS (
+    SELECT DS.DateValue
+    FROM DateSeries DS
+    LEFT JOIN employee E ON DS.DateValue = E.history_date -- Replace 'employee' and 'history_date' with your actual table name and date column
+    WHERE E.history_date IS NULL
+)
+SELECT DateValue AS MissingDate
+FROM MissingDates
+OPTION (MAXRECURSION 0); -- This allows for an unlimited number of recursions. Adjust as necessary.
+
