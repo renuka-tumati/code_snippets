@@ -1,3 +1,29 @@
+from pyspark.sql import SparkSession
+
+# Create a Spark session
+spark = SparkSession.builder.appName("example").getOrCreate()
+
+# SQL Server JDBC URL and connection properties
+url = "jdbc:sqlserver://<your-server-name>.database.windows.net:1433;database=<your-database-name>"
+properties = {
+    "user": "<your-username>",
+    "password": "<your-password>",
+    "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+}
+
+# Query and load into a DataFrame
+df = spark.read.jdbc(url=url, table="<your-table-name>", properties=properties)
+
+# Show the DataFrame
+df.show()
+
+
+
+
+
+
+
+
 import pandas as pd
 
 # Load the Excel file
