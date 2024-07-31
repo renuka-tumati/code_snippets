@@ -1,3 +1,41 @@
+import pandas as pd
+
+# Sample DataFrames
+df1 = pd.DataFrame({
+    'customer': ['Alice', 'Bob', 'Charlie', 'David'],
+    'order_amount': [100, 200, 300, 400]
+})
+
+df2 = pd.DataFrame({
+    'customer': ['Charlie', 'David', 'Eva', 'Frank'],
+    'order_amount': [300, 400, 500, 600]
+})
+
+# Perform a full outer merge with an indicator column
+merged_df = df1.merge(df2, on=['customer', 'order_amount'], how='outer', indicator=True)
+
+# Identify rows only in df1
+only_in_df1 = merged_df[merged_df['_merge'] == 'left_only']
+
+# Identify rows only in df2
+only_in_df2 = merged_df[merged_df['_merge'] == 'right_only']
+
+# Identify rows where `customer` exists in both but `order_amount` differs
+common_customers = df1.merge(df2, on='customer', how='inner')
+mismatched_amounts = common_customers[common_customers['order_amount_x'] != common_customers['order_amount_y']]
+
+# Print the results
+print("Customers and amounts in df1 but not in df2:")
+print(only_in_df1.drop(columns=['_merge']))
+
+print("\nCustomers and amounts in df2 but not in df1:")
+print(only_in_df2.drop(columns=['_merge']))
+
+print("\nCustomers with mismatched amounts:")
+print(mismatched_amounts[['customer', 'order_amount_x', 'order_amount_y']])
+
+
+
 from databricks.connect import DatabricksSession
 
 spark = DatabricksSession.builder.profile("profilename").getOrCreate()
