@@ -1,3 +1,5 @@
+df1['order_amount'] = pd.to_numeric(df1['order_amount'], errors='coerce')
+
 import pandas as pd
 
 # Sample DataFrames
