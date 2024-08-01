@@ -1,0 +1,39 @@
+-- Retrieve columns for table1
+CREATE OR REPLACE TEMP VIEW table1_columns AS
+SELECT col_name AS column_name
+FROM DESCRIBE table1;
+
+-- Retrieve columns for table2
+CREATE OR REPLACE TEMP VIEW table2_columns AS
+SELECT col_name AS column_name
+FROM DESCRIBE table2;
+
+-- Retrieve columns for table3
+CREATE OR REPLACE TEMP VIEW table3_columns AS
+SELECT col_name AS column_name
+FROM DESCRIBE table3;
+
+-- Find columns in table1 but not in table2
+SELECT column_name
+FROM table1_columns
+WHERE column_name NOT IN (
+  SELECT column_name
+  FROM table2_columns
+);
+
+-- Find columns in table1 and table2
+CREATE OR REPLACE TEMP VIEW common_columns AS
+SELECT column_name
+FROM table1_columns
+WHERE column_name IN (
+  SELECT column_name
+  FROM table2_columns
+);
+
+-- Find columns in common_columns but not in table3
+SELECT column_name
+FROM common_columns
+WHERE column_name NOT IN (
+  SELECT column_name
+  FROM table3_columns
+);
