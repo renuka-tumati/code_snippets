@@ -1,3 +1,27 @@
+@pytest.mark.parametrize("column_name", [
+    "columnA",
+    "columnB",
+    "columnC",
+    "columnD",
+    # Add more column names as needed
+])
+def test_queries(ssms_connection, databricks_spark_session, column_name):
+    # Define your queries
+    source_query = f"SELECT DISTINCT {column_name} FROM {TABLE_NAME};"
+    target_query = f"SELECT DISTINCT {column_name} FROM {TABLE_NAME};"
+    
+    # Execute source query on SQL Server
+    source_df = pd.read_sql(source_query, ssms_connection)
+    
+    # Execute target query on Databricks
+    target_df = databricks_spark_session.sql(target_query).toPandas()
+    
+    # Validate that both DataFrames have the same values
+    pd.testing.assert_frame_equal(source_df, target_df)
+
+
+
+
 from pyspark.sql import SparkSession
 
 # Create a Spark session
