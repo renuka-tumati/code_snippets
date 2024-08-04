@@ -1,3 +1,52 @@
+# test_queries.py
+import pytest
+import pandas as pd
+
+# Sample data for testing
+TABLES = {
+    "table1": ["columnA", "columnB"],
+    "table2": ["columnC", "columnD"],
+    "table3": ["columnE", "columnF"],
+    "table4": ["columnG", "columnH"],
+    "table5": ["columnI", "columnJ"]
+}
+
+# Example dates for testing
+AS_OF_DATES = ['2024-08-01', '2024-07-01', '2024-06-01']
+
+@pytest.mark.parametrize("table_name, columns, as_of_date", [
+    (table, col, date)
+    for table in TABLES
+    for col in TABLES[table]
+    for date in AS_OF_DATES
+])
+def test_queries(ssms_connection, databricks_spark_session, table_name, columns, as_of_date):
+    # Construct the SQL queries
+    source_query = f"""
+    SELECT DISTINCT {columns}
+    FROM {table_name}
+    WHERE as_of_date = '{as_of_date}'
+    GROUP BY {columns};
+    """
+    
+    target_query = f"""
+    SELECT DISTINCT {columns}
+    FROM {table_name}
+    WHERE as_of_date = '{as_of_date}'
+    GROUP BY {columns};
+    """
+
+    # Execute source query on SQL Server
+    source_df = pd.read_sql(source_query, ssms_connection)
+
+    # Execute target query on Databricks
+    target_df = databricks_spark_session.sql(target_query).toPandas()
+
+    # Validate that both DataFrames have the same values
+    pd.testing.assert_frame_equal(source_df, target_df)
+
+
+
 @pytest.mark.parametrize("column_name", [
     "columnA",
     "columnB",
