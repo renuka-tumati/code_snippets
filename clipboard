@@ -2,6 +2,54 @@
 import pytest
 import pandas as pd
 
+# Define mapping between source and target tables and columns
+TABLES_COLUMNS = {
+    "source_table1": {"columns": ["source_colA", "source_colB"], "target_table": "target_table1", "target_columns": ["target_colA", "target_colB"]},
+    "source_table2": {"columns": ["source_colC", "source_colD"], "target_table": "target_table2", "target_columns": ["target_colC", "target_colD"]},
+    # Add more mappings as needed
+}
+
+# Example dates for testing
+AS_OF_DATES = ['2024-08-01', '2024-07-01', '2024-06-01']
+
+@pytest.mark.parametrize("source_table, source_columns, target_table, target_columns, as_of_date", [
+    (source_table, source_info["columns"], source_info["target_table"], source_info["target_columns"], date)
+    for source_table, source_info in TABLES_COLUMNS.items()
+    for date in AS_OF_DATES
+    for source_col, target_col in zip(source_info["columns"], source_info["target_columns"])
+])
+def test_queries(ssms_connection, databricks_spark_session, source_table, source_columns, target_table, target_columns, as_of_date):
+    for source_column, target_column in zip(source_columns, target_columns):
+        source_query = f"""
+        SELECT DISTINCT {source_column}
+        FROM {source_table}
+        WHERE as_of_date = '{as_of_date}'
+        GROUP BY {source_column};
+        """
+        
+        target_query = f"""
+        SELECT DISTINCT {target_column}
+        FROM {target_table}
+        WHERE as_of_date = '{as_of_date}'
+        GROUP BY {target_column};
+        """
+
+        # Execute source query on SQL Server
+        source_df = pd.read_sql(source_query, ssms_connection)
+
+        # Execute target query on Databricks
+        target_df = databricks_spark_session.sql(target_query).toPandas()
+
+        # Validate that both DataFrames have the same values
+        pd.testing.assert_frame_equal(source_df, target_df)
+
+
+
+
+# test_queries.py
+import pytest
+import pandas as pd
+
 # Sample data for testing
 TABLES = {
     "table1": ["columnA", "columnB"],
