@@ -1,0 +1,62 @@
+import pytest
+import pandas as pd
+import json
+from sqlalchemy import create_engine
+
+# Database connection parameters
+DATABASE_URL = "your_database_connection_string"
+engine = create_engine(DATABASE_URL)
+
+# Load configuration from file
+def load_config():
+    with open('config.json', 'r') as file:
+        return json.load(file)
+
+config = load_config()
+
+# Generate test cases based on the loaded configuration
+def generate_test_cases(config):
+    test_cases = []
+    source_table = config["source_table"]
+    target_table = config["target_table"]
+    source_columns = config["source_columns"]
+    target_columns = config["target_columns"]
+    as_of_dates = config["as_of_dates"]
+    
+    for source_col in source_columns:
+        for target_col in target_columns:
+            for date in as_of_dates:
+                test_cases.append((source_table, target_table, source_col, target_col, date))
+    return test_cases
+
+# Parameterize the test with all combinations of columns and dates
+@pytest.mark.parametrize("source_table, target_table, source_col_name, target_col_name, as_of_date", generate_test_cases(config))
+def test_validate_data(source_table, target_table, source_col_name, target_col_name, as_of_date):
+    # Build source and target queries
+    source_query = f"""
+    SELECT ID, {source_col_name}
+    FROM {source_table}
+    WHERE as_of_date = '{as_of_date}'
+    """
+    
+    target_query = f"""
+    SELECT ID, {target_col_name}
+    FROM {target_table}
+    WHERE as_of_date = '{as_of_date}'
+      AND {target_col_name} IS NOT NULL
+    """
+    
+    # Fetch data from source and target tables
+    source_df = pd.read_sql(source_query, engine)
+    target_df = pd.read_sql(target_query, engine)
+    
+    # Perform the merge to find differences
+    merged_df = pd.merge(source_df, target_df, on="ID", how="outer", indicator=True)
+    
+    # Find differences
+    only_in_source = merged_df[merged_df['_merge'] == 'left_only']
+    only_in_target = merged_df[merged_df['_merge'] == 'right_only']
+    
+    # Assertions
+    assert only_in_source.empty, f"Rows in source but not in target: {only_in_source}"
+    assert only_in_target.empty, f"Rows in target but not in source: {only_in_target}"
