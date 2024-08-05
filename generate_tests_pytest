@@ -23,6 +23,17 @@
 
 
 
+    # Ensure source and target columns lists are of the same length
+    if len(source_columns) != len(target_columns):
+        raise ValueError("The number of source columns must match the number of target columns.")
+    
+    for src_col, tgt_col in zip(source_columns, target_columns):
+        for date in as_of_dates:
+            test_cases.append((source_table, target_table, src_col, tgt_col, date))
+    
+    return test_cases
+
+
 import pytest
 import pandas as pd
 import json
