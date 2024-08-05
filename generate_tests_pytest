@@ -1,3 +1,28 @@
+{
+    "source_table": "source_table_name",
+    "target_table": "target_table_name",
+    "source_columns": [
+        "source_col1",
+        "source_col2",
+        "source_col3",
+        // Add all your source columns
+    ],
+    "target_columns": [
+        "target_col1",
+        "target_col2",
+        "target_col3",
+        // Add all your target columns
+    ],
+    "as_of_dates": [
+        "2024-01-01",
+        "2024-02-01",
+        "2024-03-01",
+        // Add all your dates
+    ]
+}
+
+
+
 import pytest
 import pandas as pd
 import json
