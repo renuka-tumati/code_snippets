@@ -1,3 +1,56 @@
+
+import pandas as pd
+
+# Example DataFrames with many columns
+df1 = pd.DataFrame({
+    'id': [1, 2, 3],
+    'value1': [10, 20, 30],
+    'value2': [100, 200, 300],
+    'value3': [1000, 2000, 3000]
+})
+
+df2 = pd.DataFrame({
+    'id': [1, 2, 3],
+    'value1': [10, 21, 30],   # Note difference here
+    'value2': [100, 200, 299], # Note difference here
+    'value3': [1000, 2000, 3000] # No difference here
+})
+
+# Ensure both DataFrames have the same columns
+assert set(df1.columns) == set(df2.columns), "DataFrames must have the same columns"
+
+# Initialize a list to store the differences
+differences = []
+
+# Compare each column
+for column in df1.columns:
+    if column in df2.columns:
+        # Perform comparison
+        diff = df1[column] != df2[column]
+        
+        # Find differing rows
+        differing_rows = df1[diff]
+        
+        # Find the difference values
+        diff_values = pd.DataFrame({
+            'id': differing_rows['id'],
+            f'{column}_df1': df1.loc[diff, column],
+            f'{column}_df2': df2.loc[diff, column],
+            'difference': df1.loc[diff, column] - df2.loc[diff, column]
+        })
+        
+        if not diff_values.empty:
+            differences.append(diff_values)
+
+# Concatenate all differences into a single DataFrame
+if differences:
+    differences_df = pd.concat(differences, ignore_index=True)
+    print("Differences found:")
+    print(differences_df)
+else:
+    print("No differences found.")
+
+
 # test_queries.py
 import pytest
 import pandas as pd
