@@ -1,3 +1,13 @@
+@pytest.mark.parametrize(
+    "source_table, target_table, source_col_name, target_col_name, as_of_date",
+    [
+        ("source_table1", "target_table1", "source_col1", "target_col1", "2024-07-31"),
+        ("source_table2", "target_table2", "source_col2", "target_col2", "2024-07-31")
+        # Add more test cases here
+    ]
+)
+def test_validate_data(source_table, target_table, source_col_name, target_col_name, as_of_date):
+
 
 import pandas as pd
 
