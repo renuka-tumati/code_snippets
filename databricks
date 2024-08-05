@@ -1,3 +1,25 @@
+df1 = pd.DataFrame({
+    'ID': [1, 2, 3, 4],
+    'Value': ['A', 'B', 'C', 'D']
+})
+
+df2 = pd.DataFrame({
+    'ID': [1, 2, 3, 5],
+    'Value': ['A', 'B', 'C', 'E']
+})
+
+# Merge dataframes on 'ID' column
+merged_df = pd.merge(df1, df2, on='ID', suffixes=('_df1', '_df2'))
+
+# Filter rows where 'Value' columns do not match
+mismatches = merged_df[merged_df['Value_df1'] != merged_df['Value_df2']]
+
+# Print the mismatches
+print("Mismatches:")
+print(mismatches)
+
+
+
 df1['order_amount'] = pd.to_numeric(df1['order_amount'], errors='coerce')
 
 import pandas as pd
