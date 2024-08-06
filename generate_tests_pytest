@@ -1,3 +1,17 @@
+# Filter rows to exclude those where both 'value1' and 'value2' are NaN
+filtered_df = merged_df[~(merged_df['value1'].isna() & merged_df['value2'].isna())]
+
+print("\nFiltered DataFrame (excluding rows where both sides are NaN):")
+print(filtered_df)
+
+# Perform the comparison to find mismatches
+# Check where 'value1' is not equal to 'value2', and ensure at least one is not NaN
+filtered_df['mismatch'] = (filtered_df['value1'] != filtered_df['value2'])
+
+# Get the rows with mismatches
+mismatched_rows = filtered_df[filtered_df['mismatch']]
+
+
 
 import pandas as pd
 import numpy as np
