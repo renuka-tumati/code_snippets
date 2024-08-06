@@ -1,3 +1,41 @@
+import pandas as pd
+import numpy as np
+
+def convert_data_types(df, column_data_types):
+    for column, dtype in column_data_types.items():
+        if dtype == 'float':
+            df[column] = pd.to_numeric(df[column], errors='coerce')
+        elif dtype == 'int':
+            df[column] = pd.to_numeric(df[column], errors='coerce').astype('Int64')  # Using 'Int64' to handle NaN values
+        elif dtype == 'str':
+            df[column] = df[column].astype(str)
+        elif dtype == 'datetime':
+            df[column] = pd.to_datetime(df[column], errors='coerce')
+    return df
+
+# Define column data types for both DataFrames
+source_column_types = {
+    'source_col1': 'float',
+    'source_col2': 'str',
+    # Add all columns with their respective types
+}
+
+target_column_types = {
+    'target_col1': 'float',
+    'target_col2': 'str',
+    # Add all columns with their respective types
+}
+
+# Fetch data from source and target tables
+source_df = pd.read_sql(source_query, engine)
+target_df = pd.read_sql(target_query, engine)
+
+# Convert data types
+source_df = convert_data_types(source_df, source_column_types)
+target_df = convert_data_types(target_df, target_column_types)
+
+
+
 {
     "source_table": "source_table_name",
     "target_table": "target_table_name",
