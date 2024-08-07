@@ -1,3 +1,9 @@
+
+SELECT *
+FROM your_table
+WHERE ISNULL(NULLIF(LTRIM(RTRIM(your_column)), ''), 'replacement_value') != 'replacement_value'
+
+
 import pytest
 import pandas as pd
 import numpy as np
@@ -8,7 +14,7 @@ from pyspark.sql.functions import col
 # Define fixtures for SSMS and Databricks connections
 @pytest.fixture(scope='module')
 def ssms_connection():
-    conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=your_server;DATABASE=your_database;UID=your_username;PWD=your_password'
+    conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=your_server;DATABASE=your_database;  
     connection = pyodbc.connect(conn_str)
     yield connection
     connection.close()
