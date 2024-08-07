@@ -1,3 +1,70 @@
+import pytest
+import pandas as pd
+import numpy as np
+import pyodbc
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+# Define fixtures for SSMS and Databricks connections
+@pytest.fixture(scope='module')
+def ssms_connection():
+    conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=your_server;DATABASE=your_database;UID=your_username;PWD=your_password'
+    connection = pyodbc.connect(conn_str)
+    yield connection
+    connection.close()
+
+@pytest.fixture(scope='module')
+def databricks_spark_session():
+    spark = SparkSession.builder \
+        .appName("pytest") \
+        .getOrCreate()
+    yield spark
+    spark.stop()
+
+# Helper function to execute queries and return DataFrame
+def execute_query_to_df(connection, query, is_spark=False):
+    if is_spark:
+        return connection.sql(query).toPandas()
+    else:
+        return pd.read_sql(query, connection)
+
+# Test function to compare distinct values
+def test_distinct_values(ssms_connection, databricks_spark_session):
+    # Define queries
+    ssms_query = "SELECT DISTINCT column_name FROM source_table"
+    databricks_query = "SELECT DISTINCT column_name FROM target_table"
+
+    # Execute queries
+    ssms_df = execute_query_to_df(ssms_connection, ssms_query)
+    databricks_df = execute_query_to_df(databricks_spark_session, databricks_query, is_spark=True)
+
+    # Normalize columns and replace blanks with NaNs
+    ssms_df['column_name'] = ssms_df['column_name'].replace('', np.nan)
+    databricks_df['column_name'] = databricks_df['column_name'].replace('', np.nan)
+
+    # Compute distinct counts
+    ssms_distinct_count = ssms_df['column_name'].dropna().nunique()
+    databricks_distinct_count = databricks_df['column_name'].dropna().nunique()
+
+    # Assert distinct counts match
+    assert ssms_distinct_count == databricks_distinct_count, "Distinct counts do not match"
+
+    # Compute and compare distinct values
+    ssms_distinct_values = set(ssms_df['column_name'].dropna())
+    databricks_distinct_values = set(databricks_df['column_name'].dropna())
+
+    # Assert distinct values match
+    assert ssms_distinct_values == databricks_distinct_values, "Distinct values do not match"
+
+    # Print the results (optional for debugging purposes)
+    print(f"SSMS Distinct Count: {ssms_distinct_count}")
+    print(f"Databricks Distinct Count: {databricks_distinct_count}")
+    print(f"SSMS Distinct Values: {ssms_distinct_values}")
+    print(f"Databricks Distinct Values: {databricks_distinct_values}")
+
+
+
+
 # Filter rows to exclude those where both 'value1' and 'value2' are NaN
 filtered_df = merged_df[~(merged_df['value1'].isna() & merged_df['value2'].isna())]
 
