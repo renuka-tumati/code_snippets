@@ -1,3 +1,5 @@
+# https://docs.greatexpectations.io/docs/core/define_expectations/test_an_expectation?procedure=sample_code
+
 import great_expectations as gx
 
 context = gx.get_context()
