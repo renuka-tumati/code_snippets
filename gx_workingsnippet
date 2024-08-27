@@ -1,0 +1,24 @@
+import great_expectations as gx
+
+context = gx.get_context()
+
+
+data = {
+    'user_id': [1, 2, 3, 3, 4, 5],
+    'name': ['Alice', 'Bob', 'Charlie', 'Charlie', 'David', 'Eve']
+}
+
+df = pd.DataFrame(data)
+
+batch = context.data_sources.pandas_default.read_dataframe(df)
+
+# Define the Expectation to test:
+expectation = gx.expectations.ExpectColumnToExist(
+    column="user_id"
+)
+
+# Test the Expectation:
+validation_results = batch.validate(expectation)
+
+# Evaluate the Validation Results:
+print(validation_results)
