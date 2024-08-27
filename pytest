@@ -1,0 +1,45 @@
+import pytest
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+
+@pytest.fixture(scope="module")
+def spark():
+    # Initialize SparkSession
+    spark = SparkSession.builder \
+        .appName("Test Suite") \
+        .getOrCreate()
+    yield spark
+    spark.stop()
+
+def test_column_names(spark):
+    # Load your DataFrame
+    df = spark.table("your_table_name")
+    
+    # Define the expected column names
+    expected_column_names = ["new_col1", "new_col2", "new_col3", "new_col4"]
+
+    # Get the actual column names
+    actual_column_names = df.columns
+
+    # Assert that the expected column names match the actual column names
+    assert set(expected_column_names) == set(actual_column_names), \
+        f"Expected columns {expected_column_names} but found {actual_column_names}"
+
+def test_column_types(spark):
+    # Load your DataFrame
+    df = spark.table("your_table_name")
+    
+    # Define the expected schema
+    expected_schema = StructType([
+        StructField("new_col1", StringType(), True),  # Adjust data types as needed
+        StructField("new_col2", IntegerType(), True),
+        StructField("new_col3", StringType(), True),
+        StructField("new_col4", StringType(), True),
+    ])
+
+    # Get the actual schema
+    actual_schema = df.schema
+
+    # Assert that the expected schema matches the actual schema
+    assert expected_schema == actual_schema, \
+        f"Expected schema {expected_schema} but found {actual_schema}"
