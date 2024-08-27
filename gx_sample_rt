@@ -1,0 +1,107 @@
+Step 1: Setup Great Expectations in Your Databricks Notebook
+Install Great Expectations if you haven't already:
+
+python
+Copy code
+# Install Great Expectations
+%pip install great_expectations
+Import Required Libraries:
+
+python
+Copy code
+from great_expectations.data_context import DataContext
+from great_expectations.dataset.sparkdf_dataset import SparkDFDataset
+from great_expectations.core import ExpectationConfiguration
+from great_expectations.core.batch import Batch
+from great_expectations.core.batch import BatchRequest
+import great_expectations as ge
+Step 2: Initialize Great Expectations
+You need to create a DataContext and configure it to use your existing great_expectations directory, or you can initialize a new one.
+
+python
+Copy code
+# Initialize Great Expectations DataContext
+context = ge.data_context.DataContext("/databricks/driver/great_expectations")
+Step 3: Define Expectations for Your Table
+Here’s a sample code to validate the table structure:
+
+Load Your Spark DataFrame:
+
+python
+Copy code
+# Load your table into a Spark DataFrame
+df = spark.table("your_table_name")
+
+# Convert to Great Expectations dataset
+df_ge = SparkDFDataset(df)
+Expectation Suite:
+
+Create an expectation suite if it doesn’t exist. This step is typically done once.
+
+python
+Copy code
+# Create a new expectation suite
+context.create_expectation_suite(
+    expectation_suite_name="your_suite_name",
+    overwrite_existing=True
+)
+Define Expectations:
+
+Here’s how you can validate the table structure, including renamed columns and new columns.
+
+python
+Copy code
+# Define your expectation suite
+suite = context.get_expectation_suite("your_suite_name")
+
+# Define expectations
+# Check column names
+expected_column_names = ["new_col1", "new_col2", "new_col3", "new_col4"]  # Adjust column names accordingly
+df_ge.expect_table_column_count_to_equal(len(expected_column_names))
+
+for col_name in expected_column_names:
+    df_ge.expect_column_to_exist(col_name)
+
+# Check column names are as expected
+df_ge.expect_table_column_count_to_equal(len(expected_column_names))
+Add Expectations for Data Quality:
+
+If you want to add expectations for the new column, e.g., it should not have any null values, you can add:
+
+python
+Copy code
+# Check new column does not have null values
+df_ge.expect_column_values_to_not_be_null("new_col4")
+Step 4: Validate the Expectations
+To run the validations, use:
+
+python
+Copy code
+# Validate the dataframe against the expectation suite
+results = context.run_validation_operator(
+    "action_list_operator",
+    batch_request=BatchRequest(
+        datasource_name="your_datasource",
+        data_connector_name="default_inferred_data_connector_name",
+        data_asset_name="your_table_name"
+    ),
+    expectation_suite_name="your_suite_name"
+)
+
+# Display results
+print(results)
+Step 5: Save and Run Your Notebook
+Save the notebook.
+Run the notebook to execute the validation.
+Notes
+Replace Placeholder Values: Make sure to replace "your_table_name", "your_suite_name", and column names with actual values relevant to your table and expectations.
+
+Great Expectations Configuration: Ensure your great_expectations directory is properly set up. If not, you might need to initialize it in your notebook or set it up through Databricks.
+
+DataContext Path: Adjust the path to the great_expectations directory according to where it's set up in your Databricks environment.
+
+This approach will validate that your table structure meets your expectations, ensuring that the columns are renamed correctly and that new columns are added as required.
+
+
+
+
