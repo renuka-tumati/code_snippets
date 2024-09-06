@@ -1,0 +1,75 @@
+To connect Apache Spark to SQL Server using SQL Server Management Studio (SSMS) based on the information from the [Spark 3.5.2 JDBC documentation](https://spark.apache.org/docs/3.5.2/sql-data-sources-jdbc.html), follow these steps:
+
+### 1. **Cluster Configuration**
+
+Ensure your Spark cluster is configured to use the SQL Server JDBC driver. This involves setting up the necessary configurations in your Spark cluster's configuration files or through command-line options.
+
+#### **Spark Configuration File (spark-defaults.conf)**
+Add the following configurations:
+```plaintext
+spark.jars.packages com.microsoft.azure:spark-mssql-connector_2.12:1.2.0
+spark.executor.extraClassPath /path/to/sqljdbc42.jar
+spark.driver.extraClassPath /path/to/sqljdbc42.jar
+```
+
+#### **Command-Line Options**
+You can also pass configurations directly when submitting your Spark job:
+```bash
+spark-submit --packages com.microsoft.azure:spark-mssql-connector_2.12:1.2.0 \
+             --conf spark.executor.extraClassPath=/path/to/sqljdbc42.jar \
+             --conf spark.driver.extraClassPath=/path/to/sqljdbc42.jar \
+             your_spark_application.py
+```
+
+### 2. **Set Up Your Spark Session**
+
+Configure your Spark session to use the SQL Server JDBC driver:
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("Spark SQL Server Example") \
+    .config("spark.jars.packages", "com.microsoft.azure:spark-mssql-connector_2.12:1.2.0") \
+    .getOrCreate()
+```
+
+### 3. **Read Data from SQL Server**
+
+Use the `jdbc` format to read data from SQL Server:
+```python
+jdbcDF = spark.read.format("jdbc") \
+    .option("url", "jdbc:sqlserver://<your_server>:1433;databaseName=<your_database>") \
+    .option("dbtable", "<your_table>") \
+    .option("user", "<your_username>") \
+    .option("password", "<your_password>") \
+    .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
+    .load()
+
+jdbcDF.show()
+```
+
+### 4. **Write Data to SQL Server**
+
+Similarly, you can write data back to SQL Server:
+```python
+jdbcDF.write.format("jdbc") \
+    .option("url", "jdbc:sqlserver://<your_server>:1433;databaseName=<your_database>") \
+    .option("dbtable", "<your_table>") \
+    .option("user", "<your_username>") \
+    .option("password", "<your_password>") \
+    .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
+    .save()
+```
+
+### 5. **Using SSMS**
+
+Once the data is in SQL Server, you can use SSMS to query and manage your data as usual².
+
+If you need more detailed instructions or run into any issues, feel free to ask!
+
+Source: Conversation with Copilot, 9/6/2024
+(1) JDBC To Other Databases - Spark 3.5.2 Documentation - Apache Spark. https://spark.apache.org/docs/latest/sql-data-sources-jdbc.html.
+(2) Data Sources - Spark 3.5.2 Documentation - Apache Spark. https://spark.apache.org/docs/latest/sql-data-sources.html.
+(3) spark/docs/sql-data-sources-jdbc.md at master · apache/spark. https://github.com/apache/spark/blob/master/docs/sql-data-sources-jdbc.md.
+(4) Overview - Spark 3.5.2 Documentation - Apache Spark. https://spark.apache.org/docs/3.5.2/.
+(5) en.wikipedia.org. https://en.wikipedia.org/wiki/Apache_Spark.
