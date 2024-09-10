@@ -11,6 +11,25 @@ median_values = {col: medians[i][0] for i, col in enumerate(df.columns)}
 # Create a DataFrame for medians
 median_df = spark.createDataFrame([median_values])
 
+column_name = "your_column_name"
+
+# Calculate missing values
+missing_values = df.select((count(when(col(column_name).isNull(), column_name)) / count(lit(1))).alias("missing_values"))
+
+# Calculate zeros
+zeros = df.select((count(when(col(column_name) == 0, column_name)) / count(lit(1))).alias("zeros"))
+
+# Calculate mean
+mean_value = df.select(mean(col(column_name)).alias("mean"))
+
+# Calculate median
+median_value = df.approxQuantile(column_name, [0.5], 0.01)[0]
+
+# Calculate distinct values
+distinct_values = df.select(approx_count_distinct(col(column_name)).alias("distinct_values"))
+
+# Calculate null percentage
+null_percentage = df.select((count(when(col(column_name).isNull(), column_name)) / count(lit(1)) * 100).alias("null_percentage"))
 
 
 
