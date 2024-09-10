@@ -1,3 +1,19 @@
+
+missing_values = df.select([(count(when(col(c).isNull(), c)) / count(lit(1))).alias(c) for c in df.columns])
+
+# Calculate zeros
+zeros = df.select([(count(when(col(c) == 0, c)) / count(lit(1))).alias(c) for c in df.columns])
+
+# Calculate median
+medians = df.approxQuantile(df.columns, [0.5], 0.01)
+median_values = {col: medians[i][0] for i, col in enumerate(df.columns)}
+
+# Create a DataFrame for medians
+median_df = spark.createDataFrame([median_values])
+
+
+
+
 These scenarios should simulate real-world usage scenarios to ensure thorough testing.
 
 access controls to provide users with an environment that accurately reflects the final system.
