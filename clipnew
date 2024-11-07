@@ -1,4 +1,4 @@
-
+import os import pandas as pd # Define the source and target folders source_folder = 'path/to/source/folder' target_folder = 'path/to/target/folder' # Ensure the target folder exists os.makedirs(target_folder, exist_ok=True) # List all Excel files in the source folder excel_files = [f for f in os.listdir(source_folder) if f.endswith('.xlsx')] # Process each Excel file for excel_file in excel_files: # Construct the full file path file_path = os.path.join(source_folder, excel_file) # Read the "Todays Movements" sheet df = pd.read_excel(file_path, sheet_name='Todays Movements', usecols='I:J') # Save the extracted data to a new Excel file in the target folder output_path = os.path.join(target_folder, excel_file) df.to_excel(output_path, index=False) print("Data extraction complete!"
 missing_values = df.select([(count(when(col(c).isNull(), c)) / count(lit(1))).alias(c) for c in df.columns])
 
 # Calculate zeros
