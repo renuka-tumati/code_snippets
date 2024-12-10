@@ -1,0 +1,20 @@
+import pdfplumber
+import pandas as pd
+
+# Open the PDF file
+with pdfplumber.open("table.pdf") as pdf:
+    tables = []
+    
+    # Iterate through each page in the PDF
+    for page in pdf.pages:
+        # Extract tables from the page
+        page_tables = page.extract_tables()
+        for table in page_tables:
+            tables.append(table)
+
+# Flatten the list of tables and convert it to a DataFrame
+flattened_tables = [item for sublist in tables for item in sublist]
+df = pd.DataFrame(flattened_tables)
+
+# Save the DataFrame to a CSV file
+df.to_csv("extracted_tables.csv", index=False)
